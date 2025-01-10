@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  node-server:
+    image: node:18
+    container_name: flashcard-node-server
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    command: ["sh", "-c", "npm install && npm start"]
+
+  python-backend:
+    image: python:3.9
+    container_name: flashcard-python-backend
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    ports:
+      - "5000:5000"
+    command: ["sh", "-c", "pip install -r requirements.txt && python app.py"]
