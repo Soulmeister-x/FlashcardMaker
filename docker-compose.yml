@@ -1,9 +1,7 @@
-version: '3.8'
-
 services:
   node-server:
     image: node:18
-    container_name: flashcard-node-server
+    container_name: flashcard-frontend
     working_dir: /app
     volumes:
       - ./frontend:/app
@@ -13,10 +11,14 @@ services:
 
   python-backend:
     image: python:3.9
-    container_name: flashcard-python-backend
+    container_name: flashcard-backend
     working_dir: /app
     volumes:
       - ./backend:/app
     ports:
       - "5000:5000"
     command: ["sh", "-c", "pip install -r requirements.txt && python app.py"]
+
+networks:
+  default:
+    name: flashcard-network
