@@ -10,7 +10,7 @@ services:
     command: ["sh", "-c", "npm install && npm start"]
 
   python-backend:
-    image: python:3.9
+    image: python:3.11-slim-bookworm
     container_name: flashcard-backend
     working_dir: /app
     volumes:
