@@ -1,8 +1,18 @@
-from flask import Flask, request, jsonify
-from pdf_processor import process_file
+from flask import Flask, request, jsonify, redirect, url_for
+from pdf_processor import process_file, test_processing
+import json
 
 
 app = Flask(__name__)
+
+@app.route('/')
+def test():
+    try:
+        flashcards = test_processing()
+    except Exception as e:
+        return jsonify({"error": e}), 500
+    return jsonify(flashcards), 200
+
 
 @app.route('/process_pdf', methods=['POST'])
 def handle_pdf():
@@ -14,4 +24,4 @@ def handle_pdf():
 
 
 if '__main__' == __name__:
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
