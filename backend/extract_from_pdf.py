@@ -1,6 +1,8 @@
 import logging
 import sys
 import pymupdf
+from dotenv import load_dotenv
+
 
 logger = logging.getLogger('extract_pdf')
 logger.setLevel(logging.INFO)
@@ -13,9 +15,11 @@ fh.setLevel(logging.INFO)
 fh.setFormatter(formatter)
 logger.addHandler(fh)
 
-file_name = "KNNML_skript_vorlaeufig_24_25.pdf"
+load_dotenv()
+
+file_name = os.environ.get('PDF_FILE')
 pdf_file = pymupdf.open(file_name)
-pdf_file.authenticate("knn03nmi")
+pdf_file.authenticate(os.environ.get('PDF_PASSWORD'))
 
 # read labels, which are lines in the pdf that should get skipped
 labels = []

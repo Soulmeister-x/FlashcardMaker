@@ -15,6 +15,10 @@
 (14. import to anki)
 """
 import os
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 
 def read_pdf_file(file_path, file_password=None):
@@ -51,9 +55,8 @@ def find_repeating_strings(lines):
 
 
 def extract_data_from_pdf():
-    file_path = 'data/in/KNN&ML24_25.pdf'
-    file_path = 'data/in/KNNML_skript_vorlaeufig_24_25.pdf'
-    file_password = 'knn03nmi'
+    file_path = os.environ.get('PDF_FILE')
+    file_password = os.environ.get('PDF_PASSWORD')
     contents = read_pdf_file(file_path=file_path, file_password=file_password)
     print(f"{len(contents)} pages were extracted from {file_path}")
 
