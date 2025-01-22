@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify, redirect, url_for
+from flask_cors import CORS
 from pdf_processor import process_file, test_processing
 import json
 
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def test():

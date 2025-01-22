@@ -1,9 +1,8 @@
-
 #from langchain_core.prompts import ChatPromptTemplate
 #from langchain_ollama.llms import OllamaLLM
 #from langchain_ollama import ChatOllama
 import os
-from typing_extensions import TypedDict
+#from typing_extensions import TypedDict
 from pydantic import BaseModel
 from ollama import chat
 
@@ -68,7 +67,7 @@ def _get_template_question():
 
 def _invoke_llm(messages, format="json", model: str="llama3.2:1b"):
     response = chat(
-        messages=messages,
+        messages={"messages":messages},
         model=model,
         format=format
     )
