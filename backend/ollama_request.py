@@ -91,5 +91,9 @@ def generate_question_for_answer(answer):
 
 
 if '__main__' == __name__:
-    print(Flashcards.model_json_schema())
+    import json
+    print("Schemas")
+    print(f"Flashcards: [{json.dumps(Flashcards.model_json_schema(), indent=2)}]")
+    print(f"Question  : [{json.dumps(Question.model_json_schema(), indent=2)}]")
+    print(f"FactList  : [{json.dumps(FactList.model_json_schema(), indent=2)}]")
     #create_flashcards_from_data()
