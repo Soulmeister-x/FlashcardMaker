@@ -66,7 +66,7 @@ def _get_template_question(answer):
     ]
 
 
-def _invoke_llm(messages, format="json", model: str="llama3.2:1b"):
+def _invoke_llm(messages, format="json", model: str="llama3.2:3b"):  # deepseek-r1:1.5b"): #llama3.2:1b"):
     response = chat(
         model=model,
         messages=messages,
