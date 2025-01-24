@@ -5,6 +5,13 @@ Ziel des Projekts ist es, aus einem PDF-Vorlesungsskript Fakten zu extrahieren u
 
 ## Datenformat
 
+Was sind "die wichtigsten Fakten"?
+
+- Hauptgedanken: Die zentralen Themen oder Argumente des Dokuments.
+- Wichtige Daten: Entscheidende Statistiken, Zahlen oder Fakten.
+- Schlussfolgerungen: Zusammenfassungen von Erkenntnissen, Vorschlägen oder Empfehlungen.
+- Wichtige Zitate: Bemerkenswerte Aussagen oder Zitate von Experten, Forschern oder anderen Mitwirkenden.
+
 ### Eingabeformat
 
 Das Format der Eingabedaten ist txt oder pdf.
