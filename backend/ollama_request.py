@@ -68,14 +68,14 @@ def _get_template_question(answer):
 
 def _invoke_llm(messages, format="json", model: str="llama3.2:1b"):
     response = chat(
-        messages={"messages":messages},
         model=model,
-        format=format
+        messages=messages,
+        format=format,
     )
     return response
 
 
-def ask_llm_to_extract_facts(chunk, last_chunk):
+def ask_llm_to_extract_facts(chunk, last_chunk=""):
     template = _get_template_facts(text_chunk=chunk, previous_chunk=last_chunk)
     response = _invoke_llm(messages=template, format=FactList.model_json_schema())
     facts = FactList.model_validate_json(response.message.content)
@@ -84,7 +84,7 @@ def ask_llm_to_extract_facts(chunk, last_chunk):
 
 def generate_question_for_answer(answer):
     template = _get_template_question(answer=answer)
-    response = _invoke_llm(messages=template)
+    response = _invoke_llm(messages=template, format=Question.model_json_schema())
     question = Question.model_validate_json(response.message.content)
     return question
 
