@@ -46,35 +46,35 @@ def log_response(response: str):
 
 def _get_template_facts(text_chunk, previous_chunk):
     return [
-        ('system', 'You are a helpful and concise AI Bot that specializes in text summarization.'),
-        ('user', 'I have a chunked text. Analyze the following text_chunk and previous_chunk. Make a concise list of the most important facts from ONLY text_chunk:'),
-        ('user', f"previous_chunk (context): ### {previous_chunk} ###"),
-        ('user', f"text_chunk: ### {text_chunk} ###"),
-        ('user', 'A good fact is:\n- Short, concrete and precise.\n- Has the original language of the text (German or English).\n'),
-        ('user', 'Important:\n- Keep the language of the text (German or English).\n- Use clear, objective language without interpretations or opinions.\n- Make sure the facts cover the main content of the text without including unimportant details.\n- Avoid repetition.\n- Return only the facts, without additional explanations or comments.')
+        {'role':'system', 'content':'You are a helpful and concise AI Bot that specializes in text summarization.'},
+        {'role':'user', 'content':'I have a chunked text. Analyze the following text_chunk and previous_chunk. Make a concise list of the most important facts from ONLY text_chunk:'},
+        {'role':'user', 'content':f"previous_chunk (context): ### {previous_chunk} ###"},
+        {'role':'user', 'content':f"text_chunk: ### {text_chunk} ###"},
+        {'role':'user', 'content':'A good fact is:\n- Short, concrete and precise.\n- Has the original language of the text (German or English).\n'},
+        {'role':'user', 'content':'Important:\n- Keep the language of the text (German or English).\n- Use clear, objective language without interpretations or opinions.\n- Make sure the facts cover the main content of the text without including unimportant details.\n- Avoid repetition.\n- Return only the facts, without additional explanations or comments.'},
     ]
 
 
-def _get_template_question():
+def _get_template_question(answer):
     return [
-        ('system', 'You are a helpful AI Bot that specializes in concise text generation.'),
-        ('user', 'Generate an exact question for the provided fact in the language of the fact.'),
-        ('user', f"fact: ### {answer} ###"),
-        ('user', 'A good question is:\n- Encouraging interest and arousing curiosity.\n- Positively worded.\n- Concrete and precise.'),
-        ('user', 'Important:\n- Question must be formulated in the same language as the fact (German or English).\n- Return only the question, without additional explanations or comments.')
+        {'role':'system', 'content':'You are a helpful AI Bot that specializes in concise text generation.'},
+        {'role':'user', 'content':'Generate an exact question for the provided fact in the language of the fact.'},
+        {'role':'user', 'content':f"fact: ### {answer} ###"},
+        {'role':'user', 'content':'A good question is:\n- Encouraging interest and arousing curiosity.\n- Positively worded.\n- Concrete and precise.'},
+        {'role':'user', 'content':'Important:\n- Question must be formulated in the same language as the fact (German or English).\n- Return only the question, without additional explanations or comments.'},
     ]
 
 
-def _invoke_llm(messages, format="json", model: str="llama3.2:1b"):
+def _invoke_llm(messages, format="json", model: str="llama3.2:3b"):  # deepseek-r1:1.5b"): #llama3.2:1b"):
     response = chat(
-        messages={"messages":messages},
         model=model,
-        format=format
+        messages=messages,
+        format=format,
     )
     return response
 
 
-def ask_llm_to_extract_facts(chunk, last_chunk):
+def ask_llm_to_extract_facts(chunk, last_chunk=""):
     template = _get_template_facts(text_chunk=chunk, previous_chunk=last_chunk)
     response = _invoke_llm(messages=template, format=FactList.model_json_schema())
     facts = FactList.model_validate_json(response.message.content)
@@ -83,12 +83,16 @@ def ask_llm_to_extract_facts(chunk, last_chunk):
 
 def generate_question_for_answer(answer):
     template = _get_template_question(answer=answer)
-    response = _invoke_llm(messages=template)
+    response = _invoke_llm(messages=template, format=Question.model_json_schema())
     question = Question.model_validate_json(response.message.content)
     return question
 
 
 
 if '__main__' == __name__:
-    print(Flashcards.model_json_schema())
+    import json
+    print("Schemas")
+    print(f"Flashcards: [{json.dumps(Flashcards.model_json_schema(), indent=2)}]")
+    print(f"Question  : [{json.dumps(Question.model_json_schema(), indent=2)}]")
+    print(f"FactList  : [{json.dumps(FactList.model_json_schema(), indent=2)}]")
     #create_flashcards_from_data()
