@@ -42,6 +42,7 @@ def find_facts_from_chunks(chunks) -> list[str]:
 
 def generate_flashcards(text_chunks):
     flashcards = []
+    last_chunk = ""
     for chunk in text_chunks:
         if not chunk:
             continue
@@ -50,18 +51,30 @@ def generate_flashcards(text_chunks):
 
         # generate questions
         for answer in answers:
-            flashcards.append({
+            question = generate_question_for_answer(answer)
+            flashcard = {
                 "answer": answer,
-                "question": generate_question_for_answer(answer)
-            })
+                "question": question
+            }
+            print(f"Frage: {question}\nAntwort: {answer}\n")
+            flashcards.append(flashcard)
         last_chunk = chunk
     return flashcards
 
 
 def process_file(file):
+    print("extracting text from", file)
+    print('#' * 30)
     text = extract_text_from_file(file)
+    print("extracted text")
+    #print(text)
+    print('#' * 30)
     chunks = split_text_into_chunks(text=text)
-    return generate_flashcards(chunks)
+    #print(*chunks, sep='\n')
+    print(f"generated {len(chunks)} chunks")
+    print('#' * 30)
+    print("generating flashcards...")
+    return generate_flashcards(chunks[:20])
 
 
 def test_processing():
